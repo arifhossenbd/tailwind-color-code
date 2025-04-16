@@ -6,12 +6,16 @@
     <title>Tailwind Color Codes</title>
     <style>
       body {
+        width: fit-content;
+        margin: auto;
         font-family: sans-serif;
         padding: 2rem;
         background: #f9fafb;
         color: #111827;
       }
       .entry {
+        max-width: 420px;
+        margin: auto;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -263,30 +267,44 @@
         "bg-rose-800": "#9f1239",
         "bg-rose-900": "#881337",
       };
-      const container = document.getElementById("color-list");
 
-      for (const [name, hex] of Object.entries(colors)) {
+      const colorList = document.getElementById("color-list");
+
+      Object.entries(colors).forEach(([className, hex]) => {
         const entry = document.createElement("div");
         entry.className = "entry";
 
-        const text = `${name} : ${hex}`;
-        const span = document.createElement("span");
-        span.textContent = text;
+        const colorInfo = document.createElement("div");
+        colorInfo.style.display = "flex";
+        colorInfo.style.alignItems = "center";
+        colorInfo.style.gap = "10px";
 
-        const button = document.createElement("button");
-        button.className = "copy-btn";
-        button.textContent = "Copy";
-        button.addEventListener("click", () => {
-          navigator.clipboard.writeText(text).then(() => {
-            button.textContent = "Copied!";
-            setTimeout(() => (button.textContent = "Copy"), 1000);
-          });
-        });
+        const colorPreview = document.createElement("div");
+        colorPreview.style.width = "20px";
+        colorPreview.style.height = "20px";
+        colorPreview.style.backgroundColor = hex;
+        colorPreview.style.border = "1px solid #ddd";
+        colorPreview.style.borderRadius = "4px";
 
-        entry.appendChild(span);
-        entry.appendChild(button);
-        container.appendChild(entry);
-      }
+        const text = document.createElement("span");
+        text.textContent = `${className} → ${hex}`;
+
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "copy-btn";
+        copyBtn.textContent = "Copy";
+        copyBtn.onclick = () => {
+          navigator.clipboard.writeText(hex);
+          copyBtn.textContent = "Copied!";
+          setTimeout(() => (copyBtn.textContent = "Copy"), 1000);
+        };
+
+        colorInfo.appendChild(colorPreview);
+        colorInfo.appendChild(text);
+        entry.appendChild(colorInfo);
+        entry.appendChild(copyBtn);
+
+        colorList.appendChild(entry);
+      });
     </script>
   </body>
 </html>
